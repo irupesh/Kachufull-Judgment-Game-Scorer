@@ -28,6 +28,7 @@ const submitRoundBtn = document.getElementById('submitRoundBtn');
 const scoreHistory = document.getElementById('scoreHistory');
 const winnerModal = document.getElementById('winnerModal');
 const exportScoreHistoryBtn = document.getElementById('exportScoreHistoryBtn');
+submitRoundBtn.disabled = true;
 
 // Helper Functions
 const calculateTotalRounds = () => maxCards ? (parseInt(maxCards) * 2) - 1 : 0;
@@ -145,7 +146,7 @@ const updateScoreHistory = () => {
     const playerColumns = document.getElementById('playerColumns');
     //playerColumns.innerHTML = players.map(player => `<th>${player}</th>`).join('');
 	
-	pcols = players.map(player => `<th>${player}</th>`).join('');
+	pcols = players.map(player => `<th id="${player}" >${player}</th>`).join('');
 	playerColumns.innerHTML = '<tr><th>Round</th><th>Cards</th><th>Trump</th>' +  pcols + '</tr>';
 
     const tbody = document.getElementById('scoreTableBody');
@@ -184,7 +185,27 @@ const updateScoreHistory = () => {
         </tr>
     `;
 
+    const { player, score } = determineWinner();
+    addWinnerCrown(player);
+
 };
+
+// Function to add a winner crown
+function addWinnerCrown(playerId) {
+    // Get the <th> element by its ID
+    const playerElement = document.getElementById(playerId);
+    
+    // Check if the crown is already added (to avoid duplicates)
+    if (!playerElement.querySelector('.crown')) {
+      // Create a span for the crown icon
+      const crownIcon = document.createElement('span');
+      crownIcon.className = 'crown';
+      crownIcon.textContent = '👑'; // Crown emoji
+      
+      // Append the crown icon to the player's name
+      playerElement.appendChild(crownIcon);
+    }
+  }
 
 // Event Handlers
 const resetGame = () => {
@@ -340,6 +361,7 @@ const submitRound = () => {
     updateScoreHistory();
 
     exportScoreHistoryBtn.style.display = 'block';
+    submitRoundBtn.disabled = true;
 };
 
 // Event Listeners
