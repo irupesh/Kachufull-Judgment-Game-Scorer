@@ -130,10 +130,11 @@ const updateScoreHistory = () => {
     //playerColumns.innerHTML = players.map(player => `<th>${player}</th>`).join('');
 	
 	pcols = players.map(player => `<th>${player}</th>`).join('');
-	playerColumns.innerHTML = '<tr><th>Round</th><th>Cards</th><th>Trump</th><th>Dealer</th>' +  pcols + '</tr>';
+	playerColumns.innerHTML = '<tr><th>Round</th><th>Cards</th><th>Trump</th>' +  pcols + '</tr>';
 
     const tbody = document.getElementById('scoreTableBody');
-    tbody.innerHTML = rounds.map((round, index) => `
+
+    /* tbody.innerHTML = rounds.map((round, index) => `
         <tr>
             <td>${index + 1}</td>
             <td>${getCardsForRound(index)}</td>
@@ -145,6 +146,22 @@ const updateScoreHistory = () => {
         <tr class="total-row">
             <td>Total</td>
             <td></td>
+            <td></td>
+            <td></td>
+            ${players.map(player => `<td>${getTotalScore(player)}</td>`).join('')}
+        </tr>
+    `; */
+
+    tbody.innerHTML = rounds.map((round, index) => `
+        <tr>
+            <td>${index + 1}</td>
+            <td>${getCardsForRound(index)}</td>
+            <td>${SUITS[index % SUITS.length].symbol}</td>
+            ${players.map(player => `<td>${round[player] || 0}</td>`).join('')}
+        </tr>
+    `).join('') + `
+        <tr class="total-row">
+            <td>Total</td>
             <td></td>
             <td></td>
             ${players.map(player => `<td>${getTotalScore(player)}</td>`).join('')}
