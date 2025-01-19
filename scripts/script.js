@@ -59,7 +59,7 @@ const updateGameInfo = () => {
 };
 
 const calculateScore = (player, originalBid, scoredBid) => {
-    const bid = parseInt(originalBid) || 0;
+    bid = parseInt(originalBid) || 0;
     const scored = parseInt(scoredBid) || 0;
     const currentExtraHands = parseInt(cumulativeExtraHands[player]) || 0;
 
@@ -70,7 +70,7 @@ const calculateScore = (player, originalBid, scoredBid) => {
         };
     }
 	
-	//Rupesh
+	//Handle 0 0 case
 	if (scored == 0 && bid == 0) {
         return {
             score: 10,
@@ -82,6 +82,11 @@ const calculateScore = (player, originalBid, scoredBid) => {
     const newTotalExtraHands = currentExtraHands + extraHands;
     const penaltyCount = Math.floor(newTotalExtraHands / 10);
     const remainingExtraHands = newTotalExtraHands % 10;
+
+    //Handle 0 X case
+	if (bid == 0) {
+        bid = 1;
+    }
     
     return {
         score: (bid * 10) + extraHands - (penaltyCount * 100),
