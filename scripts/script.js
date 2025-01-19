@@ -27,6 +27,7 @@ const playersList = document.getElementById('playersList');
 const submitRoundBtn = document.getElementById('submitRoundBtn');
 const scoreHistory = document.getElementById('scoreHistory');
 const winnerModal = document.getElementById('winnerModal');
+const exportScoreHistoryBtn = document.getElementById('exportScoreHistoryBtn');
 
 // Helper Functions
 const calculateTotalRounds = () => maxCards ? (parseInt(maxCards) * 2) - 1 : 0;
@@ -109,6 +110,21 @@ const determineWinner = () => {
     return { player: winningPlayer, score: maxScore };
 };
 
+const exportScoreHistory = () => {
+
+    // Set options for the PDF
+    const options = {
+        margin: 1,
+        filename: 'scoreHistory.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    // Generate and save the PDF
+    html2pdf().set(options).from(scoreHistory).save();
+};
+
 const showWinnerModal = (winner, score) => {
     document.getElementById('winnerName').textContent = `${winner} Wins!`;
     document.getElementById('winnerScore').textContent = `Total Score: ${score}`;
@@ -167,6 +183,7 @@ const updateScoreHistory = () => {
             ${players.map(player => `<td>${getTotalScore(player)}</td>`).join('')}
         </tr>
     `;
+
 };
 
 // Event Handlers
@@ -184,6 +201,7 @@ const resetGame = () => {
     gameInterface.style.display = 'none';
     resetBtn.style.display = 'none';
     scoreHistory.style.display = 'none';
+    exportScoreHistoryBtn.style.display = 'none';
     maxCardsInput.value = '';
     newPlayerInput.value = '';
     playersList.innerHTML = '';
@@ -320,6 +338,8 @@ const submitRound = () => {
     }
     
     updateScoreHistory();
+
+    exportScoreHistoryBtn.style.display = 'block';
 };
 
 // Event Listeners
@@ -335,6 +355,7 @@ window.addEventListener('load', () => {
     addPlayerBtn.addEventListener('click', addPlayer);
     startGameBtn.addEventListener('click', startNewGame);
     resetBtn.addEventListener('click', resetGame);
+    exportScoreHistoryBtn.addEventListener('click', exportScoreHistory);
     submitRoundBtn.addEventListener('click', submitRound);
     maxCardsInput.addEventListener('input', updateStartButtonState);
     newPlayerInput.addEventListener('keypress', (e) => {
