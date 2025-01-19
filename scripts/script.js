@@ -323,6 +323,14 @@ const submitRound = () => {
 };
 
 // Event Listeners
+
+// Warn the user before reloading or leaving the page
+window.addEventListener('beforeunload', function (event) {
+    // Custom message is ignored by most browsers; use default dialog
+    event.preventDefault();
+    event.returnValue = ''; // Required for modern browsers to show the dialog
+});
+
 window.addEventListener('load', () => {
     addPlayerBtn.addEventListener('click', addPlayer);
     startGameBtn.addEventListener('click', startNewGame);
